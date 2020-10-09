@@ -9,6 +9,7 @@ export default class ImageItem extends Component {
         super(props)
         this.imageHandler = new Image()
         this.imageHandler.addEventListener('load', this.onImageLoad)
+        this.imageHandler.addEventListener('error', this.onImageError)
         this.state = { image: null }
     }
 
@@ -19,6 +20,7 @@ export default class ImageItem extends Component {
 
     componentWillUnmount() {
         this.imageHandler.removeEventListener('load', this.onImageLoad)
+        this.imageHandler.removeEventListener('error', this.onImageError)
         this.imageHandler = null
     }
 
@@ -31,9 +33,15 @@ export default class ImageItem extends Component {
         typeof onLoad === 'function' && onLoad(src, width, height)
     }
 
+    onImageError = e => {
+        
+    }
+
     handleClick = () => {
         const { src, onClick } = this.props
-        typeof onClick === 'function' && onClick(src)
+        if (this.state.image && typeof onClick === 'function') {
+            onClick(src)
+        }
     }
 
     render() {
